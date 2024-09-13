@@ -3,7 +3,7 @@ from src.User import User
 
 
 class Library:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__books: list[Book] = []
         self.__users: list[User] = []
         self.__checked_out_books: list[list[str]] = []
@@ -38,14 +38,12 @@ class Library:
     # 2.1 Check out book
     def check_out_book(self, isbn: str, dni: str, due_date: str) -> str:
         verif1: bool = False
-        verif2: bool = False
         for user in self.__users:
             if user.get_dni() == dni:
                 verif1 = True
         for book in self.__books:
             if book.get_isbn() == isbn:
-                verif2 = True
-                if book.is_available():
+                if book.is_available() and verif1   :
                     self.__checked_out_books.append([isbn, dni, due_date])
                     book.set_available(False)
                     book.increment_checkout_num()
@@ -53,8 +51,7 @@ class Library:
                     return f"User {user} checked out book {isbn}"
                 else:
                     return f"Book {isbn} is not available"
-        if verif1 == False or verif2 == False:
-            return f"Unable to find the data for the values: ISBN {isbn} and DNI: {dni}"
+        return f"Unable to find the data for the values: ISBN {isbn} and DNI: {dni}"
 
     # 2.2 Check in book
     def check_in_book(self, isbn: str, dni: str, returned_date: str) -> str:
@@ -70,7 +67,7 @@ class Library:
 
 
     # Utils
-    def add_user(self, dni, name) -> None:
+    def add_user(self, dni: str, name: str) -> None:
         new_user = User(dni, name)
         for user in self.__users:
             if user.get_dni() == dni:
